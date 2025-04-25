@@ -31,8 +31,8 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-          aws-region: ${{ secrets.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_FRONT_DEPLOY }}
+          aws-region: ${{ secrets.AWS_FROMT_REGION }}
 
       - name: Deploy to S3
-        run: aws s3 sync ./out ${{ secrets.AWS_RAVNICALIBRARY_S3 }} -delete
+        run: aws s3 sync ./out ${{ secrets.AWS_FRONT_BUCKET }} -delete
