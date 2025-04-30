@@ -1,6 +1,16 @@
 import Link from 'next/link';
+import SearchBar from "@/components/ui/searchbar";
+
+async function handleSearchAction(query: string) {
+  'use server'
+  console.log('Searching for:', query);
+
+  return;
+}
+
 
 export default function Home() {
+
   return (
       <main className="min-h-screen">
         {/* Hero Section */}
@@ -15,6 +25,9 @@ export default function Home() {
               <Link href="/decks" className="bg-transparent hover:bg-white/10 border border-white text-white font-bold py-3 px-6 rounded-lg transition-colors">
                 Build Decks
               </Link>
+            </div>
+            <div className="flex justify-center items-center mt-8">
+              <SearchBar onSearchAction={handleSearchAction}/>
             </div>
           </div>
         </section>
