@@ -32,7 +32,8 @@ DerivedData
 project.xcworkspace
 
 # Android/IntelliJ
-.idea
+.idea/
+.idea/jsLinters/
 .gradle
 local.properties
 *.iml

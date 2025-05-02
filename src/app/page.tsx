@@ -1,13 +1,6 @@
 import Link from 'next/link';
 import SearchBar from "@/components/ui/searchbar";
 
-async function handleSearchAction(query: string) {
-  'use server'
-  console.log('Searching for:', query);
-
-  return;
-}
-
 
 export default function Home() {
 
@@ -27,7 +20,7 @@ export default function Home() {
               </Link>
             </div>
             <div className="flex justify-center items-center mt-8">
-              <SearchBar onSearchAction={handleSearchAction}/>
+              <SearchBar/>
             </div>
           </div>
         </section>

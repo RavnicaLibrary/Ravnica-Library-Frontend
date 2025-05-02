@@ -1,13 +1,14 @@
-'use client'; // If using Next.js 13+ App Router
+'use client';
 
 import {FormEvent, useState} from 'react';
+import {useRouter} from 'next/navigation';
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 
-export default function SearchBar({ onSearchAction }: { onSearchAction: (query: string) => void }) {
+export default function SearchBar() {
     const [query, setQuery] = useState('');
-
     const [isLoading, setIsLoading] = useState(false);
+    const router = useRouter(); // Initialize the router
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -17,17 +18,10 @@ export default function SearchBar({ onSearchAction }: { onSearchAction: (query: 
         setIsLoading(true);
 
         try {
-            await new Promise(resolve => setTimeout(resolve, 1500));
-
-            if (typeof onSearchAction === 'function') {
-                onSearchAction(query);
-            }
+            router.push(`/search?q=${encodeURIComponent(query)}`);
         } catch (error) {
-            // Handle any errors
-            console.error('Search failed:', error);
-        } finally {
-            // Always reset loading state when done, whether successful or not
-            setIsLoading(false);
+            console.error('Navigation failed:', error);
+            setIsLoading(false); // Only reset loading if navigation fails
         }
     };
 
@@ -46,7 +40,6 @@ export default function SearchBar({ onSearchAction }: { onSearchAction: (query: 
             >
                 {isLoading && (
                     <span className="absolute left-2">
-                        {/* You can use an SVG spinner here or an icon from a library */}
                         <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
                             <circle
                                 className="opacity-25"
@@ -59,12 +52,12 @@ export default function SearchBar({ onSearchAction }: { onSearchAction: (query: 
                                 fill="currentColor"
                                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                             />
-                          </svg>
-                        </span>
-                        )}
-                        <span className={isLoading ? "pl-6" : ""}>
-            {               isLoading ? 'Searching...' : 'Search'}
-                        </span>
+                        </svg>
+                    </span>
+                )}
+                <span className={isLoading ? "pl-6" : ""}>
+                    {isLoading ? 'Searching...' : 'Search'}
+                </span>
             </Button>
         </form>
     );
