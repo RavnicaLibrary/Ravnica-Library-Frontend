@@ -1,0 +1,61 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL") // e.g. file:./dev.db
+}
+
+model User {
+  id           String     @id @default(cuid())
+  email        String     @unique
+  passwordHash String
+  nickname     String
+  createdAt    DateTime   @default(now())
+  decks        Deck[]
+  ownedCards   OwnedCard[]
+}
+
+model Deck {
+  id        String     @id @default(cuid())
+  name      String
+  user      User       @relation(fields: [userId], references: [id])
+  userId    String
+  createdAt DateTime   @default(now())
+  cards     DeckCard[]
+}
+
+model DeckCard {
+  id      String @id @default(cuid())
+  deck    Deck   @relation(fields: [deckId], references: [id])
+  deckId  String
+  cardId  String // scryfall id
+  qty     Int    @default(1)
+}
+
+model OwnedCard {
+  id      String  @id @default(cuid())
+  user    User    @relation(fields: [userId], references: [id])
+  userId  String
+  cardId  String // scryfall id
+  qty     Int     @default(1)
+  updatedAt DateTime @updatedAt
+  @@unique([userId, cardId])
+}
